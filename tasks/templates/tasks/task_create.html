@@ -1,0 +1,21 @@
+<h1>タスク追加</h1>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>タイトル</label>
+    <input type="text" name="title">
+
+    <label>優先度</label>
+    <select name="priority">
+        <option value="high">★★★</option>
+        <option value="medium">★★</option>
+        <option value="low">★</option>
+    </select>
+
+    <label>期限</label>
+    <input type="datetime-local" name="due_date" value="{{ task.due_date }}">
+    
+    <button type="submit">追加</button>
+
+</form>   

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>過去タスク一覧</title>
+</head>
+<body>
+    <h1>過去タスク一覧</h1>
+
+    <ul>
+        {% for task in tasks %}
+        <li>
+            {{ task.title }} - {{ task.get_priority_display }} -  {{ task.due_date }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'home' %}">戻る</a>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新規登録</title>
+</head>
+<body>
+    <h1>新規登録</h1>
+
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>ユーザー名</label>
+        <input type="text" name="username"><br>
+
+        <label>パスワード</label>
+        <input type="password" name="password"><br>
+
+        <label>パスワード確認</label>
+        <input type="password" name="password_confirm"><br>
+
+        <label>あなたは？</label>
+        <select name="role">
+            <option value="mama">ママ</option>
+            <option value="papa">パパ</option>
+            <option value="child">子ども</option>
+        </select><br><br>
+
+        <label>ファミリー名（ママ・パパの方のみ）</label>
+        <input type="text" name="family_name"><br>
+
+        <label>ファミリーコード（子どもの方のみ）</label>
+        <input type="text" name="family_code"><br><br>
+
+        <button type="submit">登録</button>
+    </form>
+ <br>
+    <a href="{% url 'welcome' %}">戻る</a>
+</body>
+</html>

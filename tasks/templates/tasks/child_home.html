@@ -1,0 +1,23 @@
+{% extends 'tasks/base.html' %}
+
+{% block title %}子ホーム{% endblock %}
+
+{% block content %}
+    <h1>子ホーム画面</h1>
+
+    <p>{{ family_name }}のホーム</p>
+    <ul>
+        {% for task in tasks %}
+        <li>
+            {{ task.title}} -  {{ task.get_priority_display}} - {{ task.due_date|date:"m/d H:i" }}まで - {{ task.get_status_display }}
+            {% if task.status != 'done' %}
+            <a href="{% url 'task_edit' task.id %}">編集</a><br>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul><br><br>
+
+    <a href="{% url 'task_create' %}">追加</a><br>
+
+
+{% endblock %}

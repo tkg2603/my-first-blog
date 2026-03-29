@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Family Task App{% endblock %}</title>
+</head>
+<body>
+
+    <nav>
+        <span>Family Task App</span>
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">ログアウト</button>
+        </form>
+        {% endif %}
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>
