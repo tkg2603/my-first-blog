@@ -1,14 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>ようこそ</title>
-</head>
-<body>
-    <h1>Family Task App</h1>
+{% extends 'tasks/base.html' %}
+
+{% block title %}ようこそ{% endblock %}
+
+
+{% block content %}
+    
     <p>家族みんなのタスクを管理しよう！</p>
 
-    <a href="{% url 'login' %}">ログイン</a>
-
+    <a href="{% url 'login' %}">ログイン</a><br>
+    <br>
     <a href="{% url 'register' %}">新規登録</a>
-</body>
-</html>
+
+{% endblock %}

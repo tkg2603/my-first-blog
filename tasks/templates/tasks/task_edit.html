@@ -1,20 +1,22 @@
-<h1>タスク編集</h1>
+{% extends 'tasks/base.html' %}
+{% block content %}
+<h1>タスク編集</h1><br>
 
 <form method="POST">
     {% csrf_token %}
 
     <label>タイトル</label>
-    <input type="text" name="title" value="{{ task.title }}">
+    <input type="text" name="title" value="{{ task.title }}"><br>
 
     <label>優先度</label>
     <select name="priority">
         <option value="high" {% if task.priority == 'high' %}selected{% endif %}>★★★</option>
         <option value="medium" {% if task.priority == 'medium' %}selected{% endif %}>★★</option>
         <option value="low" {% if task.priority == 'low' %}selected{% endif %}>★</option>
-    </select>
+    </select><br>
     
     <label>期限</label>
-    <input type="datetime-local" name="due_date" value="{{ task.due_date|date:'Y-m-d\TH:i' }}">
+    <input type="datetime-local" name="due_date" value="{{ task.due_date|date:'Y-m-d\TH:i' }}"><br>
     
     <label>ステータス</label>
     <select name="status">
@@ -24,10 +26,13 @@
     </select>
     
     <button type="submit">更新</button>
-</form>
-
+</form><br>
+{% if user.role in 'mama,papa' %}
+<form method="POST" action="{% url 'task_delete' task.id %}">
     <form method="POST" action="{% url 'task_delete' task.id %}">
     {% csrf_token %}
     <button type="submit">削除</button>
 
 </form>
+{% endif %}
+{% endblock %}

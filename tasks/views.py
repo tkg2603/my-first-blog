@@ -12,18 +12,42 @@ def register(request):
         password = request.POST.get("password")
         password_confirm = request.POST.get("password_confirm")
 
+        if not username:
+            return render(request, 'tasks/register.html', {
+                'error': 'ユーザー名を入力してください'
+            })
+        
+        if not password:
+            return render(request, 'tasks/register.html', {
+                'error': 'パスワードを入力してください'
+            })
+
         if password != password_confirm:
             return render(request, 'tasks/register.html', {
                 'error': 'パスワードが一致しません'
             })
+        if User.objects.filter(username=username).exists():
+            return render(request, 'tasks/register.html', {
+                'error': 'このユーザー名はすでに使われています'
+            })
+
+
         role = request.POST.get("role")
         family_name = request.POST.get("family_name")
         family_code = request.POST.get("family_code")
 
         if role in ['mama', 'papa']:
+            if not family_name:
+                return render(request, 'tasks/register.html', {
+                  'error': 'ファミリー名を入力してください'
+                 })
             family = Family.objects.create(name=family_name)
 
         else:
+            if not family_code:
+                return render(request, 'tasks/register.html', {
+                    'error': 'ファミリーコードを入力してください'
+                 })
             try:
                 family = Family.objects.get(code=family_code)
             except Family.DoesNotExist:
@@ -76,6 +100,8 @@ def task_create(request):
 
 @login_required   
 def task_delete(request, task_id):
+    if request.user.role not in ['mama', 'papa']:
+        return redirect('home')
     task = Task.objects.get(id=task_id)
     task.delete()   
     
@@ -83,7 +109,9 @@ def task_delete(request, task_id):
 
 @login_required
 def task_edit(request, task_id):
+    
     task = Task.objects.get(id=task_id)
+
 
     if request.method == "POST":
         task.title = request.POST.get("title")
