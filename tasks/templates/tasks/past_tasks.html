@@ -2,16 +2,20 @@
 
 {% block title %}過去タスク一覧{% endblock %}
 {% block content %}
-    <h1>過去タスク一覧</h1>
+    <h1 class="text-center">過去タスク一覧</h1>
 
-    <ul>
+    <ul class="text-center list-unstyled">
         {% for task in tasks %}
         <li>
-            {{ task.title }} - {{ task.get_priority_display }} -  {{ task.due_date }}
+            {{ task.title }} - {{ task.get_priority_display }} - {{ task.due_date }}
         </li>
         {% endfor %}
     </ul>
 
-    <a href="{% url 'home' %}">戻る</a>
+    <div class="text-center mt-3">
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+          戻る
+        </a>
+    </div>
 
 {% endblock %}

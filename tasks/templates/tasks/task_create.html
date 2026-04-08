@@ -2,23 +2,44 @@
 {% block title %}タスク追加{% endblock %}
 
 {% block content %}
-<form method="POST">
-    {% csrf_token %}
 
-    <label>タイトル</label>
-    <input type="text" name="title">
+<div class="container" style="max-width: 400px;">
+    <h2 class="text-center mb-4">タスク追加</h2>
 
-    <label>優先度</label>
-    <select name="priority">
-        <option value="high">★★★</option>
-        <option value="medium">★★</option>
-        <option value="low">★</option>
-    </select>
+    <form method="POST">
+        {% csrf_token %}
 
-    <label>期限</label>
-    <input type="datetime-local" name="due_date" value="{{ task.due_date }}">
-    
-    <button type="submit">追加</button>
+        <div class="mb-3">
+            <label class="form-label">タイトル</label>
+            <input type="text" name="title" class="form-control">
+        </div>
 
-</form>   
+        <div class="mb-3">
+            <label class="form-label">優先度</label>
+            <select name="priority" class="form-select">
+                <option value="high">★★★</option>
+                <option value="medium">★★</option>
+                <option value="low">★</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">期限</label>
+            <input type="datetime-local" name="due_date" class="form-control">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary px-4">
+                追加
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<div class="text-center mt-3">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+        戻る
+    </a>
+</div>
 {% endblock %}

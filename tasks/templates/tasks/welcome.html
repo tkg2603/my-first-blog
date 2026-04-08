@@ -7,8 +7,14 @@
     
     <p>家族みんなのタスクを管理しよう！</p>
 
-    <a href="{% url 'login' %}">ログイン</a><br>
-    <br>
-    <a href="{% url 'register' %}">新規登録</a>
+    <div class="d-grid gap-2 col-6 mx-auto">
+      <a href="{% url 'login' %}" class="btn btn-primary">
+        ログイン
+      </a>
+
+      <a href="{% url 'register' %}" class="btn btn-outline-secondary">
+        新規登録
+      </a>
+     </div>
 
 {% endblock %}

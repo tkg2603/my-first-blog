@@ -3,31 +3,48 @@
 {% block title %}親ホーム{% endblock %}
 
 {% block content %}
-    <h1>親ホーム画面</h1><br>
+    <h1>HOME</h1><br>
 
-    <p>{{ family_name }}のホーム</p>
+    <p>{{ family_name }}のタスク</p>
     <p>ファミリーコード：{{ family_code }}</p>
 
-    <button onclick="document.getElementById('progressModal').style.display='block'">
-        進捗
-    </button><br><br>
-
-    <ul>
+    <div class="card mb-3 shadow-sm mx-auto text-center"
+     style="max-width: 100px; cursor: pointer;"
+     onclick="document.getElementById('progressModal').style.display='block'">
+    <div class="card-body">
+        進捗🏃‍♀️
+    </div>
+</div><br>
+    <ul class="list-unstyled">
     {% for task in tasks %}
     {% if task.status != 'in_progress' %}
-    <li>
+    <li class="mb-2 text-center">
         {{ task.title }}
         {{ task.get_priority_display }}<br>
         {{ task.due_date|date:"m/d H:i" }}<br>
         {{ task.get_status_display }}<br>
-        <a href="{% url 'task_edit' task.id %}">編集</a>
-    </li>
+        <a href="{% url 'task_edit' task.id %}" class="btn btn-sm btn-outline-secondary">
+         編集
+        </a><br>
+
     {% endif %}
     {% endfor %}
     <br>
-    <a href="{% url 'task_create' %}">追加</a><br>
-    <a href="{% url 'past_tasks' %}">過去データ</a><br>
+<a href="{% url 'task_create' %}" class="text-decoration-none text-dark">
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body text-center">
+            ➕追加
+        </div>
+    </div>
+</a>
 
+<a href="{% url 'past_tasks' %}" class="text-decoration-none text-dark">
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body text-center">
+            過去データ📊
+        </div>
+    </div>
+</a>
     </ul>
 
 
@@ -46,7 +63,7 @@
                 {% endfor %}
             </ul>
 
-            <button onclick="document.getElementById('progressModal').style.display='none'">×</button>
+            <a onclick="document.getElementById('progressModal').style.display='none'"></a>
         </div>
     </div>
 {% endblock %}   
