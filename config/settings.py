@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#h2(&i!73x17whrvrd3kxmedn!)8$u)y9(t&v$d5wx&x*@-ua0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['tkg2603.pythonanywhere.com']
 
 
 # Application definition
@@ -121,4 +121,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+<<<<<<< Updated upstream
 LOGIN_URL = '/login/'
+=======
+MEDIA_URL = '/media/'
+STATIC_ROOT = Path(BASE_DIR / 'static')
+MEDIA_ROOT = Path(BASE_DIR / 'media')
+>>>>>>> Stashed changes
