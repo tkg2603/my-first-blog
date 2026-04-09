@@ -23,10 +23,11 @@
         {{ task.get_priority_display }}<br>
         {{ task.due_date|date:"m/d H:i" }}<br>
         {{ task.get_status_display }}<br>
+    
         <a href="{% url 'task_edit' task.id %}" class="btn btn-sm btn-outline-secondary">
          編集
         </a><br>
-
+    </li>
     {% endif %}
     {% endfor %}
     <br>
@@ -48,22 +49,47 @@
     </ul>
 
 
-    <div id="progressModal" style="display:none; background:#000000aa; position:fixed; top:0; left:0; width:100%; height:100%;">
-        <div style="background:white; margin:100px auto; padding:20px; width:50%;">
-            <h2>進捗</h2>
+   <div id="progressModal" style="
+       display:none; 
+       position:fixed; 
+       top:0; 
+       left:0; 
+       width:100%; 
+       height:100%; 
+       background:#000000aa; 
+       justify-content:center;
+       align-items:center;
+       z-index:1000;
+    ">
+       <div style="
+           background:white; 
+           padding:20px; 
+           width:50%; 
+           max-width:400px;
+           border-radius:8px;
+           text-align:center;  /* ← ここを追加 */
+           position:relative;
+        ">
+        <h2>今は…</h2>
 
-          <ul>
-                {% for task in tasks %}
-                {% if task.status == 'in_progress' %}
-                <li>
-                     {{ task.title }}
-                     {{ task.get_status_display }}
-                </li>
-                {% endif %}
-                {% endfor %}
-            </ul>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            {% for task in tasks %}
+            {% if task.status == 'in_progress' %}
+            <li>
+                {{ task.title }}
+                {{ task.get_status_display }}
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
 
-            <a onclick="document.getElementById('progressModal').style.display='none'"></a>
-        </div>
+        <button onclick="document.getElementById('progressModal').style.display='none'" 
+            class="btn btn-secondary mt-3">
+            ×
+        </button>
     </div>
+</div>
+
+
+    
 {% endblock %}   
