@@ -9,7 +9,7 @@ SECRET_KEY = 'j1#8ne%_p7%ia%c4^&!zeygq0!23l-nou)'
 # 開発用は True、本番は False
 DEBUG = True
 
-ALLOWED_HOSTS = ['tkg2603.pythonanywhere.com']
+ALLOWED_HOSTS = ['tkg2603.pythonanywhere.com', ]
 
 # インストールアプリ
 INSTALLED_APPS = [

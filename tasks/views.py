@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Task, User, Family, UserTask
+from itertools import groupby
+from django.utils.timezone import localdate
 
 # Create your views here.
 def welcome(request):
@@ -36,14 +38,27 @@ def register(request):
         family_name = request.POST.get("family_name")
         family_code = request.POST.get("family_code")
 
-        if role in ['mama', 'papa']:
-            if not family_name:
-                return render(request, 'tasks/register.html', {
-                  'error': 'ファミリー名を入力してください'
-                 })
-            family = Family.objects.create(name=family_name)
+        family = None  
 
-        else:
+        if role in ['mama', 'papa']:
+            if family_code:
+                # 親でもコードがあれば既存のファミリーを探す（第二登録者パターン）
+                try:
+                    family = Family.objects.get(code=family_code)
+                except Family.DoesNotExist:
+                    return render(request, 'tasks/register.html', {
+                        'error': 'ファミリーコードが正しくありません'
+                    })
+            elif family_name:
+                # コードがなく、ファミリー名がある場合は新規作成（第一登録者パターン）
+                family = Family.objects.create(name=family_name)
+            else:
+                # どちらも入力がない場合
+                return render(request, 'tasks/register.html', {
+                    'error': 'ファミリー名またはファミリーコードを入力してください'
+                })
+
+        else:  # 子供などの場合
             if not family_code:
                 return render(request, 'tasks/register.html', {
                     'error': 'ファミリーコードを入力してください'
@@ -64,6 +79,7 @@ def register(request):
         return redirect("login")
     
     return render(request, 'tasks/register.html')
+        
 
 @login_required
 def task_list(request):
@@ -94,7 +110,6 @@ def task_create(request):
          family_members = User.objects.filter(family=request.user.family)
          for member in family_members:
              UserTask.objects.create(user=member, task=task)
-         request.user.family,
          return redirect("home")
     return render(request, "tasks/task_create.html")
 
@@ -128,13 +143,20 @@ def home(request):
         return redirect('register')
 
     tasks = Task.objects.filter(
-        user_tasks__user__family=request.user.family
-        ).distinct().order_by('due_date')
+        user_tasks__user__family=request.user.family,
+        status='todo'  
+    ).distinct().order_by('due_date')
 
-    
+    in_progress_tasks = Task.objects.filter(
+        user_tasks__user__family=request.user.family,
+        status='in_progress'
+    ).distinct().order_by('due_date')
+
+
     if request.user.role in ['mama', 'papa']:
         return render (request, 'tasks/parent_home.html',
                         {'tasks': tasks,
+                         'in_progress_tasks': in_progress_tasks,
                          'family_code': request.user.family.code,
                          'family_name': request.user.family.name,
                          })
@@ -149,8 +171,16 @@ def past_tasks(request):
     tasks = Task.objects.filter(
         user_tasks__user__family=request.user.family,
         status='done'
-    ).distinct()
-    return render(request, 'tasks/past_tasks.html', {'tasks': tasks})
+    ).distinct().order_by('-due_date')
+
+    grouped_tasks = []
+    for date, group in groupby(tasks, key=lambda t: t.due_date.date() if t.due_date else None):
+        grouped_tasks.append({
+            'date': date,
+            'tasks': list(group)
+        })
+
+    return render(request, 'tasks/past_tasks.html', {'grouped_tasks': grouped_tasks,})
 
 @login_required
 def task_complete(request, task_id):
