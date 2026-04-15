@@ -144,7 +144,7 @@ def home(request):
 
     tasks = Task.objects.filter(
         user_tasks__user__family=request.user.family,
-        status='todo'  
+        status__in=['todo', 'in_progress']  
     ).distinct().order_by('due_date')
 
     in_progress_tasks = Task.objects.filter(
